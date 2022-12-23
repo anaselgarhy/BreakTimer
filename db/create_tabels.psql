@@ -1,0 +1,19 @@
+CREATE TABLE Users
+(
+    id         SERIAL PRIMARY KEY,
+    first_name VARCHAR(25),
+    last_name  VARCHAR(25),
+    username   VARCHAR(25),
+    email      VARCHAR(150),
+    password   VARCHAR(30)
+);
+CREATE TABLE Timers
+(
+    id          SERIAL PRIMARY KEY,
+    user_id     INTEGER REFERENCES Users (id),
+    name        VARCHAR(30),
+    description TEXT,
+    icon        TEXT,
+    work_time   INTEGER,
+    break_time  INTEGER
+);
