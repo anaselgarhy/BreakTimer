@@ -1,8 +1,12 @@
 package com.anas.universty.breacktimer.storage;
 
+import com.anas.universty.breacktimer.storage.db.DatabaseHelper;
 import com.anas.universty.breacktimer.timer.TimerData;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="https://github.com/anas-elgarhy">Anas Elgarhy</a>
@@ -16,34 +20,49 @@ public class UserData {
     private String username;
     private String email;
     private String password;
-    private ArrayList<TimerData> timers;
+    private Map<Integer, TimerData> timers;
 
     public UserData(final String firstName, final String lastName, final String username,
                     final String email, final String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
+        this(-1, firstName, lastName, username, email, password, new HashMap<>());
+    }
+
+    public UserData(final int id, final String fistName, final String lastName, final String username,
+                    final String email, final String password) {
+        this(id, fistName, lastName, username, email, password, new HashMap<>());
     }
 
     public UserData(final int id, final String firstName, final String lastName, final String username,
-                    final String email, final String password) {
+                    final String email, final String password, final HashMap<Integer, TimerData> timers) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.timers = timers;
+    }
+
+    public UserData(final String username, final String password) {
+        this(-1, null, null, username, null, password);
     }
 
     /**
-     * Add new timer to user timers
+     * Add new timer to user timers, or update the timer if it already exists
+     * <p>This method updates the database too</p>
      *
      * @param timerData the timer data
+     * @throws SQLException if there is an error while updating the database
      */
-    public void addTimer(final TimerData timerData) {
-        timers.add(timerData);
+    public void addTimer(final TimerData timerData) throws SQLException {
+        if (timerData.getId() == -1) {
+            timerData.setId(DatabaseHelper.INSTANCE.addTimer(timerData, this.id));
+            timers.put(timerData.getId(), timerData);
+        } else {
+            DatabaseHelper.INSTANCE.updateTimer(timerData);
+            timers.replace(timerData.getId(), timerData);
+        }
+
     }
 
     /*----------------------- Setters and Getters -----------------------*/
@@ -140,7 +159,7 @@ public class UserData {
     /**
      * @return the timers
      */
-    public ArrayList<TimerData> getTimers() {
+    public Map<Integer, TimerData> getTimers() {
         return timers;
     }
 
@@ -149,7 +168,21 @@ public class UserData {
      *
      * @param timers the timers to set
      */
-    public void setTimers(ArrayList<TimerData> timers) {
+    public void setTimers(HashMap<Integer, TimerData> timers) {
         this.timers = timers;
+    }
+
+    /**
+     * Remove timer from user timers, and delete it from the database
+     *
+     * @param timerId the timer id to remove
+     * @throws SQLException if there is an error while deleting the timer from the database.
+     */
+    public TimerData removeTimer(final int timerId) throws SQLException {
+        if (timers.containsKey(timerId)) {
+            DatabaseHelper.INSTANCE.deleteTimer(timerId);
+            return timers.remove(timerId);
+        }
+        return null;
     }
 }

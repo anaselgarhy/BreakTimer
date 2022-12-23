@@ -15,6 +15,7 @@ public class TimerData {
 
     public TimerData(final int id, final String name, final String description, final String icon,
                      final int workTime, final int breakTime) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.icon = icon;
@@ -26,11 +27,15 @@ public class TimerData {
         return id;
     }
 
+    public void setId(final int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -38,7 +43,7 @@ public class TimerData {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -46,7 +51,7 @@ public class TimerData {
         return icon;
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(final String icon) {
         this.icon = icon;
     }
 
@@ -54,7 +59,7 @@ public class TimerData {
         return workTime;
     }
 
-    public void setWorkTime(int workTime) {
+    public void setWorkTime(final int workTime) {
         this.workTime = workTime;
     }
 
@@ -62,7 +67,7 @@ public class TimerData {
         return breakTime;
     }
 
-    public void setBreakTime(int breakTime) {
+    public void setBreakTime(final int breakTime) {
         this.breakTime = breakTime;
     }
 }
