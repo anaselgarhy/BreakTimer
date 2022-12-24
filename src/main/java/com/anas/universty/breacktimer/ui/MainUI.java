@@ -117,4 +117,8 @@ public class MainUI extends JFrame implements UpdateListener, MouseListener {
     public void mouseExited(final MouseEvent e) {
 
     }
+
+    private void createUIComponents() {
+        mainPanel = new JPanel();
+    }
 }

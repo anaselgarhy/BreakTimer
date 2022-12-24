@@ -17,7 +17,7 @@ import javax.swing.*;
  * @since 23/12/2022
  */
 public class RegistrationForm extends JDialog {
-    private JPanel panel1;
+    private JPanel mainPnel;
     private JTextField firstNameTextField;
     private JTextField lastNameTextField;
     private JTextField usernameTextField;
@@ -31,7 +31,7 @@ public class RegistrationForm extends JDialog {
     private JLabel passwordLabel;
 
     public RegistrationForm() {
-        super.setContentPane(panel1);
+        super.setContentPane(mainPnel);
         super.setModal(true);
         setupUI();
         setupTheListeners();
@@ -91,5 +91,9 @@ public class RegistrationForm extends JDialog {
         registerButton.setFont(Fonts.SP_BUTTON_FONT.font());
         registerButton.setFocusable(false);
         registerButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    }
+
+    private void createUIComponents() {
+        mainPnel = new JPanel();
     }
 }

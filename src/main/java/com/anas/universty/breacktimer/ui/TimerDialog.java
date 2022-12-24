@@ -77,4 +77,8 @@ public class TimerDialog extends JDialog implements TimerListener {
     public void onStateSwitch(final Timer.State state) {
         updateNoteLabel();
     }
+
+    private void createUIComponents() {
+        mainPanel = new JPanel();
+    }
 }

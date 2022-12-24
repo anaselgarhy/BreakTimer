@@ -3,6 +3,7 @@ package com.anas.universty.breacktimer.ui;
 import com.anas.universty.breacktimer.timer.TimerData;
 
 import javax.swing.*;
+import java.awt.event.MouseListener;
 
 /**
  * @author <a href="https://github.com/anas-elgarhy">Anas Elgarhy</a>
@@ -33,6 +34,15 @@ public class TimerWidget extends JPanel {
         timerNameLabel.setIcon(new ImageIcon(timerData.getIcon()));
         workTimeLabel.setText(String.valueOf(timerData.getWorkTime()));
         breakTimeLabel.setText(String.valueOf(timerData.getBreakTime()));
+    }
+
+    @Override
+    public synchronized void addMouseListener(final MouseListener l) {
+        super.addMouseListener(l);
+        panel1.addMouseListener(l);
+        timerNameLabel.addMouseListener(l);
+        workTimeLabel.addMouseListener(l);
+        breakTimeLabel.addMouseListener(l);
     }
 
     /**

@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * @since 23/12/2022
  */
 public class EditTimerDialog extends JDialog {
-    private JPanel panel1;
+    private JPanel mainPanel;
     private JLabel timerIcon;
     private JTextField timerNameTextField;
     private JTextArea descriptionTextArea;
@@ -34,7 +34,7 @@ public class EditTimerDialog extends JDialog {
     public EditTimerDialog(final TimerData timerData, final UserData userData) {
         this.userData = userData;
         timerId = -1;
-        super.setContentPane(panel1);
+        super.setContentPane(mainPanel);
         super.setModal(true);
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -182,5 +182,9 @@ public class EditTimerDialog extends JDialog {
 
     public void setUpdateListener(final UpdateListener updateListener) {
         this.updateListener = updateListener;
+    }
+
+    private void createUIComponents() {
+        mainPanel = new JPanel();
     }
 }

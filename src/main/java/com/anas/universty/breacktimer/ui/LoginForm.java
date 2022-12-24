@@ -115,4 +115,8 @@ public class LoginForm extends JFrame {
         usernameField.setText(user.getUsername());
         passwordField.setText(user.getPassword());
     }
+
+    private void createUIComponents() {
+        mainPanel = new JPanel();
+    }
 }
