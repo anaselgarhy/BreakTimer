@@ -21,7 +21,7 @@ import java.awt.event.MouseEvent;
  * @since 22/12/2022
  */
 public class LoginForm extends JFrame {
-    private JPanel panel1;
+    private JPanel mainPanel;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
@@ -31,8 +31,8 @@ public class LoginForm extends JFrame {
 
     public LoginForm() {
         super.setTitle("Login Form");
-        super.setContentPane(panel1);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.setContentPane(mainPanel);
 
         setupUI();
         setupRegisterLabel();
@@ -44,7 +44,7 @@ public class LoginForm extends JFrame {
     }
 
     private void setupUI() {
-        panel1.setBackground(Colors.BACKGROUND_COLOR.color());
+        mainPanel.setBackground(Colors.BACKGROUND_COLOR.color());
 
         Colors.TEXT_COLOR.applyToAllAsForeground(usernameLabel, passwordLabel);
 
