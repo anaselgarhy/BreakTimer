@@ -24,6 +24,9 @@ public class TimerWidget extends JPanel {
     public TimerWidget(final TimerData timerData) {
         this.id = timerData.getId();
         super.add(panel1);
+        super.setPreferredSize(panel1.getPreferredSize());
+        super.setMaximumSize(panel1.getPreferredSize());
+        super.setMinimumSize(panel1.getPreferredSize());
 
         // Set up the widget data
         timerNameLabel.setText(timerData.getName());

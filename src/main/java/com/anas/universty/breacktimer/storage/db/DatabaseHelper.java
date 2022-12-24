@@ -228,14 +228,16 @@ public enum DatabaseHelper {
         statement.setString(2, timer.getName());
         statement.setString(3, timer.getDescription());
         statement.setString(4, timer.getIcon());
-        statement.setInt(5, timer.getWorkTime());
-        statement.setInt(6, timer.getBreakTime());
+        statement.setInt(5, timer.getWorkTime().toMinutes());
+        statement.setInt(6, timer.getBreakTime().toMinutes());
 
         // Execute the query
         statement.executeUpdate();
 
         // Get the id of the timer
         final var resultSet = connection.prepareStatement("SELECT nextval('timers_id_seq')").executeQuery();
+
+        resultSet.next();
 
         return resultSet.getInt(1) - 1;
     }
@@ -246,8 +248,8 @@ public enum DatabaseHelper {
         statement.setString(1, timer.getName());
         statement.setString(2, timer.getDescription());
         statement.setString(3, timer.getIcon());
-        statement.setInt(4, timer.getWorkTime());
-        statement.setInt(5, timer.getBreakTime());
+        statement.setInt(4, timer.getWorkTime().toMinutes());
+        statement.setInt(5, timer.getBreakTime().toMinutes());
         statement.setInt(6, timer.getId());
 
         // Execute the query

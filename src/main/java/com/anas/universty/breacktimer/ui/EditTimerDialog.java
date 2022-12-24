@@ -37,8 +37,6 @@ public class EditTimerDialog extends JDialog {
         super.setContentPane(panel1);
         super.setModal(true);
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        super.pack();
-        super.setLocationRelativeTo(null); // center the dialog
 
         if (timerData != null) {
             iconPath = timerData.getIcon();
@@ -56,6 +54,8 @@ public class EditTimerDialog extends JDialog {
 
         setupUI();
         setupTheListeners();
+        super.pack();
+        super.setLocationRelativeTo(null); // center the dialog
 
         super.setVisible(true);
     }
@@ -125,6 +125,7 @@ public class EditTimerDialog extends JDialog {
                 final var timerData = new TimerData(timerId, name, description, iconPath, workTime, breakTime);
                 userData.addTimer(timerData);
                 if (updateListener != null) {
+                    super.dispose();
                     if (timerId == -1) {
                         updateListener.onAddNewTimer(timerData);
                     } else {
@@ -135,9 +136,7 @@ public class EditTimerDialog extends JDialog {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "An error occurred while saving the timer",
                         "Error", JOptionPane.ERROR_MESSAGE);
-                return;
             }
-            super.dispose();
         });
 
         removeButton.addActionListener(e -> {
@@ -145,7 +144,9 @@ public class EditTimerDialog extends JDialog {
                     "Remove Timer", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 // Remove the timer from the database and close the dialog
                 try {
-                    onRemoveTimer(userData.removeTimer(timerId));
+                    final var removedTimer = userData.removeTimer(timerId);
+                    super.dispose();
+                    onRemoveTimer(removedTimer);
                 } catch (final SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "An error occurred while removing the timer",

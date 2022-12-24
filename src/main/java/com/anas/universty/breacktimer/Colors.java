@@ -8,12 +8,12 @@ import java.awt.*;
  * @since 21/12/2022
  */
 public enum Colors {
-    LINK_COLOR("#0000FF"),
-    BACKGROUND_COLOR("#a93020"),
+    LINK_COLOR("#000065"),
+    BACKGROUND_COLOR("#EEEEEE"),
     INPUT_FIELD_COLOR("#b4b4b4"),
     INPUT_FIELD_TEXT_COLOR("#000000"),
     INPUT_FIELD_BORDER_COLOR("#2e7682"),
-    TEXT_COLOR("#FFFFFF"),
+    TEXT_COLOR("#616161"),
     SP_BUTTON_COLOR("#2e7682"),
     SP_BUTTON_TEXT_COLOR("#FFFFFF")
     ;

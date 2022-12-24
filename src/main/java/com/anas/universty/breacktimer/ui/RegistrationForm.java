@@ -29,17 +29,15 @@ public class RegistrationForm extends JDialog {
     private JLabel usernameLabel;
     private JLabel emailLabel;
     private JLabel passwordLabel;
-    private LoginForm loginForm;
 
-    public RegistrationForm(final LoginForm loginForm) {
-        setContentPane(panel1);
-        setModal(true);
+    public RegistrationForm() {
+        super.setContentPane(panel1);
+        super.setModal(true);
         setupUI();
         setupTheListeners();
-        pack();
-        setVisible(true);
-        this.loginForm = loginForm;
-        loginForm.setVisible(false);
+        super.pack(); // resize the form to fit the components
+        super.setLocationRelativeTo(null); // center the form
+        super.setVisible(true);
     }
 
     private void setupTheListeners() {
@@ -62,9 +60,12 @@ public class RegistrationForm extends JDialog {
             try {
                 final var user = DatabaseHelper.INSTANCE.registerUser(firstNameTextField.getText(), lastNameTextField.getText(),
                         usernameTextField.getText(), emailTextField.getText(), String.valueOf(passwordPasswordField.getPassword()));
+                // Re open the login form.
+                final var loginForm = new LoginForm();
                 loginForm.updateFields(user);
                 loginForm.setVisible(true);
-                dispose();
+                System.out.println(user);
+                super.dispose();
             } catch (final Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }

@@ -10,8 +10,8 @@ public class TimerData {
     private String name;
     private String description;
     private String icon;
-    private int workTime;
-    private int breakTime;
+    private Clock workClock;
+    private Clock breakClock;
 
     public TimerData(final int id, final String name, final String description, final String icon,
                      final int workTime, final int breakTime) {
@@ -19,8 +19,8 @@ public class TimerData {
         this.name = name;
         this.description = description;
         this.icon = icon;
-        this.workTime = workTime;
-        this.breakTime = breakTime;
+        this.workClock = Clock.fromMinutes(workTime);
+        this.breakClock = Clock.fromMinutes(breakTime);
     }
 
     public int getId() {
@@ -55,19 +55,19 @@ public class TimerData {
         this.icon = icon;
     }
 
-    public int getWorkTime() {
-        return workTime;
+    public Clock getWorkTime() {
+        return workClock;
     }
 
-    public void setWorkTime(final int workTime) {
-        this.workTime = workTime;
+    public void setWorkTime(final Clock workTime) {
+        this.workClock = workTime;
     }
 
-    public int getBreakTime() {
-        return breakTime;
+    public Clock getBreakTime() {
+        return breakClock;
     }
 
-    public void setBreakTime(final int breakTime) {
-        this.breakTime = breakTime;
+    public void setBreakTime(final Clock breakTime) {
+        this.breakClock = breakTime;
     }
 }
