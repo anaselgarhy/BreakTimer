@@ -40,20 +40,29 @@ public class TimerDialog extends JDialog implements TimerListener {
 
     private void setupTheListeners() {
         startButton.addActionListener(e -> {
-            if (Timer.INSTANCE.isRunning()) {
+            if (!Timer.INSTANCE.isRunning()) {
                 // Start the timer
                 Timer.INSTANCE.setTimerData(timerData);
                 Timer.INSTANCE.setListener(this);
                 Timer.INSTANCE.start(Timer.State.WORKING);
                 // Change the button icon
-                startButton.setIcon(new ImageIcon(Objects.requireNonNull(
-                        getClass().getResource("src/main/resources/stop-button_graid.png"))));
+                startButton.setIcon(new ImageIcon("src/main/resources/stop-button_graid.png"));
+                // Change the button text
+                startButton.setText("Stop");
             } else {
                 // Stop the timer
                 Timer.INSTANCE.stop();
                 // Change the button icon
-                startButton.setIcon(new ImageIcon(Objects.requireNonNull(
-                        getClass().getResource("src/main/resources/play.png"))));
+                startButton.setIcon(new ImageIcon("src/main/resources/play.png"));
+                // Change button text
+                startButton.setText("Start");
+
+                // Update the timer label
+                if (Timer.isWorkTime()) {
+                    timerLabel.setText(timerData.getWorkTime().toString());
+                } else {
+                    timerLabel.setText(timerData.getBreakTime().toString());
+                }
             }
         });
 
@@ -70,6 +79,7 @@ public class TimerDialog extends JDialog implements TimerListener {
 
     @Override
     public void onTimerUpdate(final Clock clock) {
+        System.out.println("TimerDialog.onTimerUpdate");
         timerLabel.setText(clock.toString());
     }
 
@@ -80,5 +90,12 @@ public class TimerDialog extends JDialog implements TimerListener {
 
     private void createUIComponents() {
         mainPanel = new JPanel();
+    }
+
+    public static void main(String[] args) {
+        final var timerData = new TimerData(1, "test", "Test timer", "src/main/resources/laptop.png", Clock.fromMinutes(25).toMinutes(), Clock.fromMinutes(5).toMinutes());
+        timerData.setIcon("src/main/resources/timer.png");
+        final var dialog = new TimerDialog(null, timerData);
+        dialog.setVisible(true);
     }
 }

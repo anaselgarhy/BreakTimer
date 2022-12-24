@@ -20,6 +20,10 @@ public class Clock {
         return new Clock(minutes / 60, (byte) (minutes % 60), (byte) 0);
     }
 
+    public static Clock clone(final Clock otherClock) {
+        return new Clock(otherClock.hours, otherClock.minutes, otherClock.seconds);
+    }
+
     public int toMinutes() {
         return hours * 60 + minutes;
     }

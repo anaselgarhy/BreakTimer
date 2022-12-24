@@ -8,7 +8,6 @@ package com.anas.universty.breacktimer.timer;
 public enum Timer {
     INSTANCE; // Singleton enum pattern
 
-
     public enum State {
         WORKING,
         BREAKING
@@ -18,6 +17,7 @@ public enum Timer {
     private State state;
     private TimerListener listener;
     private Thread timerThread;
+    private Clock clock;
 
     Timer() {
         state = State.BREAKING;
@@ -27,18 +27,26 @@ public enum Timer {
         this.timerData = timerData;
     }
 
+    private void setTheClock() {
+        if (state == State.WORKING) {
+            clock = Clock.clone(timerData.getWorkTime());
+        } else {
+            clock = Clock.clone(timerData.getBreakTime());
+        }
+    }
+
     public void start(final State state) throws IllegalStateException {
         if (timerData == null) {
             throw new IllegalStateException("Timer data is null");
         }
         this.state = state;
+        setTheClock();
         startTimer();
     }
 
     private void startTimer() {
         timerThread = new Thread(() -> {
-            final var clock = state == State.WORKING ? timerData.getWorkTime() : timerData.getBreakTime();
-            while (clock.ended()) {
+            while (!clock.ended()) {
                 try {
                     Thread.sleep(1000);
                 } catch (final InterruptedException e) {
@@ -58,7 +66,7 @@ public enum Timer {
 
     public void stop() {
         if (timerThread != null) {
-            timerThread.interrupt();
+            timerThread.stop();
         }
         timerThread = null;
     }
