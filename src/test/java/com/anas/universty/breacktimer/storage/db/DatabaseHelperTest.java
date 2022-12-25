@@ -1,5 +1,6 @@
 package com.anas.universty.breacktimer.storage.db;
 
+import com.anas.universty.breacktimer.timer.TimerData;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,20 +12,23 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * Test the database helper class
+ *
  * @author <a href="https://github.com/anas-elgarhy">Anas Elgarhy</a>
  * @version 1.0
  * @since 23/12/2022
  */
 class DatabaseHelperTest {
     private static final Logger LOGGER = Logger.getLogger(DatabaseHelperTest.class.getName());
+    private int userId;
 
     @BeforeEach
     void setupTestUser() {
         // Create new user for testing
         LOGGER.info("Creating new user (anas) for testing...");
         try {
-            DatabaseHelper.INSTANCE.registerUser("Anas", "Elgarhy",
-                    "anas", "anas.elgarhy.dev@gmail.com", "anasA#3");
+            userId = DatabaseHelper.INSTANCE.registerUser("Anas", "Elgarhy",
+                    "anas", "anas.elgarhy.dev@gmail.com", "anasA#3").getId();
         } catch (final RegistrationException | SQLException | LoginException e) {
             fail("Registration failed");
         }
@@ -67,7 +71,7 @@ class DatabaseHelperTest {
     @Test
     void emailExists() throws SQLException {
         assertDoesNotThrow(() -> DatabaseHelper.INSTANCE.emailExists("anas.elgarhy.dev@gmail.com"));
-        
+
         assertTrue(DatabaseHelper.INSTANCE.emailExists("anas.elgarhy.dev@gmail.com"));
         assertFalse(DatabaseHelper.INSTANCE.emailExists("anaselgarhy@email.com"));
     }
@@ -87,6 +91,7 @@ class DatabaseHelperTest {
             fail("Failed to delete user");
         }
     }
+
     @Test
     void deleteUser() {
         LOGGER.info("Trying to delete user (anas) with correct credentials");
@@ -124,17 +129,50 @@ class DatabaseHelperTest {
 
     @Test
     void addTimer() {
+        for (var i = 1; i <= 10; i++) {
+            final var timerData = new TimerData(-1, "Timer " + i, "This is timer " + i,
+                    "src/main/resources/laptop.png", 15 * i, 5 * i);
+            assertDoesNotThrow(() -> DatabaseHelper.INSTANCE.addTimer(timerData, userId));
+        }
+
+        // Try to add timer warning user id
+        assertThrows(SQLException.class, () -> DatabaseHelper.INSTANCE.addTimer(new TimerData(-1, "Timer 21", "This is timer 1",
+                "src/main/resources/laptop.png", 15, 5), 5463345));
     }
 
     @Test
     void updateTimer() {
+        final var timerData = new TimerData(-1, "Timer 1", "This is timer 1",
+                "src/main/resources/laptop.png", 15, 5);
+        assertDoesNotThrow(() -> DatabaseHelper.INSTANCE.addTimer(timerData, userId));
+
+        final var updatedTimerData = new TimerData(timerData.getId(), "Timer 2", "This is timer 2",
+                "src/main/resources/laptop.png", 15, 5);
+        assertDoesNotThrow(() -> DatabaseHelper.INSTANCE.updateTimer(updatedTimerData));
     }
 
     @Test
     void deleteTimer() {
+        final var timerData = new TimerData(-1, "Timer 1", "This is timer 1",
+                "src/main/resources/laptop.png", 15, 5);
+        assertDoesNotThrow(() -> timerData.setId(DatabaseHelper.INSTANCE.addTimer(timerData, userId)));
+
+        assertDoesNotThrow(() -> DatabaseHelper.INSTANCE.deleteTimer(timerData.getId()));
     }
 
     @Test
     void fetchTimers() {
+        LOGGER.info("Creating 40 timers...");
+        for (var i = 1; i <= 40; i++) {
+            final var timerData = new TimerData(-1, "Timer " + i, "This is timer " + i,
+                    "src/main/resources/laptop.png", 15 * i, 5 * i);
+            assertDoesNotThrow(() -> DatabaseHelper.INSTANCE.addTimer(timerData, userId));
+        }
+
+        LOGGER.info("Fetch the all timers of the user");
+        assertDoesNotThrow(() -> {
+            final var timers = DatabaseHelper.INSTANCE.fetchTimers(userId);
+            assertEquals(40, timers.size());
+        });
     }
 }

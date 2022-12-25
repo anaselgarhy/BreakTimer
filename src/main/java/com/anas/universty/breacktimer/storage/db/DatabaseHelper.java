@@ -7,9 +7,7 @@ import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -203,15 +201,15 @@ public enum DatabaseHelper {
             throw new UserDoseNotExistException();
         }
 
+        // Delete the timers
+        deleteUserTimers(userId);
+
         // Delete the user
         var statement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
         statement.setInt(1, userId);
 
         // Execute the query
         statement.executeUpdate();
-
-        // Delete the timers
-        deleteUserTimers(userId);
     }
 
     private void deleteUserTimers(final int userId) throws SQLException {
