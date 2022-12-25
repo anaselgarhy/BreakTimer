@@ -34,6 +34,7 @@ public class EditTimerDialog extends JDialog {
     public EditTimerDialog(final TimerData timerData, final UserData userData) {
         this.userData = userData;
         timerId = -1;
+        mainPanel = new JPanel();
         super.setContentPane(mainPanel);
         super.setModal(true);
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -182,9 +183,5 @@ public class EditTimerDialog extends JDialog {
 
     public void setUpdateListener(final UpdateListener updateListener) {
         this.updateListener = updateListener;
-    }
-
-    private void createUIComponents() {
-        mainPanel = new JPanel();
     }
 }

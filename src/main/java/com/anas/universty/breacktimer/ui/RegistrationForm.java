@@ -31,6 +31,7 @@ public class RegistrationForm extends JDialog {
     private JLabel passwordLabel;
 
     public RegistrationForm() {
+        mainPnel = new JPanel();
         super.setContentPane(mainPnel);
         super.setModal(true);
         setupUI();
@@ -91,9 +92,5 @@ public class RegistrationForm extends JDialog {
         registerButton.setFont(Fonts.SP_BUTTON_FONT.font());
         registerButton.setFocusable(false);
         registerButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    }
-
-    private void createUIComponents() {
-        mainPnel = new JPanel();
     }
 }

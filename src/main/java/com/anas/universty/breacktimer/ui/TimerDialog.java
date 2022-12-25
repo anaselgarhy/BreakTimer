@@ -6,7 +6,6 @@ import com.anas.universty.breacktimer.timer.TimerData;
 import com.anas.universty.breacktimer.timer.TimerListener;
 
 import javax.swing.*;
-import java.util.Objects;
 
 /**
  * @author <a href="https://github.com/anas-elgarhy">Anas Elgarhy</a>
@@ -27,6 +26,7 @@ public class TimerDialog extends JDialog implements TimerListener {
         this.mainUI = mainUI;
         this.timerData = timerData;
 
+        mainPanel = new JPanel();
         super.setContentPane(mainPanel);
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         super.pack();
@@ -86,10 +86,6 @@ public class TimerDialog extends JDialog implements TimerListener {
     @Override
     public void onStateSwitch(final Timer.State state) {
         updateNoteLabel();
-    }
-
-    private void createUIComponents() {
-        mainPanel = new JPanel();
     }
 
     public static void main(String[] args) {
