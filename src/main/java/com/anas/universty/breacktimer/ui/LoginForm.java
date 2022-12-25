@@ -32,7 +32,6 @@ public class LoginForm extends JFrame {
     public LoginForm() {
         super.setTitle("Login Form");
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainPanel = new JPanel();
         super.setContentPane(mainPanel);
 
         setupUI();
@@ -115,5 +114,9 @@ public class LoginForm extends JFrame {
     public void updateFields(final UserData user) {
         usernameField.setText(user.getUsername());
         passwordField.setText(user.getPassword());
+    }
+
+    private void createUIComponents() {
+        mainPanel = new JPanel();
     }
 }

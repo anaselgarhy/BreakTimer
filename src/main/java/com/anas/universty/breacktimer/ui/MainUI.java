@@ -25,7 +25,6 @@ public class MainUI extends JFrame implements UpdateListener, MouseListener {
     public MainUI(final UserData userData) {
         this.userData = userData;
 
-        mainPanel = new JPanel();
         super.setContentPane(mainPanel);
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.pack();
@@ -117,5 +116,9 @@ public class MainUI extends JFrame implements UpdateListener, MouseListener {
     @Override
     public void mouseExited(final MouseEvent e) {
 
+    }
+
+    private void createUIComponents() {
+        mainPanel = new JPanel();
     }
 }
