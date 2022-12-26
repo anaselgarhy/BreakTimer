@@ -61,13 +61,13 @@ public class LoginForm extends JFrame {
 
     private void setupLoginButton() {
         loginButton.addActionListener(e -> {
+            // validate the username and password
             try {
                 new UsernameValidator().validate(usernameField.getText());
                 new PasswordValidator().validate(String.valueOf(passwordField.getPassword()));
             } catch (final ValidationException exception) {
                 JOptionPane.showMessageDialog(this, exception.getMessage(), "Error",
                         JOptionPane.ERROR_MESSAGE);
-                System.out.println(usernameField.getText());
                 return;
             }
 

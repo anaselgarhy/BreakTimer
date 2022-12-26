@@ -1,5 +1,6 @@
 package com.anas.universty.breacktimer.ui;
 
+import com.anas.universty.breacktimer.Colors;
 import com.anas.universty.breacktimer.storage.UserData;
 import com.anas.universty.breacktimer.timer.TimerData;
 
@@ -29,14 +30,13 @@ public class EditTimerDialog extends JDialog {
     private String iconPath;
     private final UserData userData;
     private int timerId;
-    private UpdateListener updateListener;
 
     public EditTimerDialog(final TimerData timerData, final UserData userData) {
         this.userData = userData;
         timerId = -1;
         super.setContentPane(mainPanel);
         super.setModal(true);
-        super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         if (timerData != null) {
             iconPath = timerData.getIcon();
@@ -44,8 +44,8 @@ public class EditTimerDialog extends JDialog {
             timerIcon.setIcon(new ImageIcon(iconPath));
             timerNameTextField.setText(timerData.getName());
             descriptionTextArea.setText(timerData.getDescription());
-            workTimeSpinner.setValue(timerData.getWorkTime());
-            breakTimeSpinner.setValue(timerData.getBreakTime());
+            workTimeSpinner.setValue(timerData.getWorkTime().toMinutes());
+            breakTimeSpinner.setValue(timerData.getBreakTime().toMinutes());
 
             // Enable the remove and save buttons
             saveButton.setEnabled(true);
@@ -61,6 +61,13 @@ public class EditTimerDialog extends JDialog {
     }
 
     private void setupUI() {
+        mainPanel.setBackground(Colors.BACKGROUND_COLOR.color());
+        timerIcon.setBackground(Colors.BACKGROUND_COLOR.color());
+        timerNameTextField.setBackground(Colors.BACKGROUND_COLOR.color());
+        timerNameTextField.setForeground(Colors.TEXT_COLOR.color());
+        descriptionTextArea.setBackground(Colors.INPUT_FIELD_COLOR.color());
+        descriptionTextArea.setForeground(Colors.INPUT_FIELD_TEXT_COLOR.color());
+
         timerIcon.setCursor(new Cursor(Cursor.HAND_CURSOR)); // change the cursor to hand cursor
 
         // set the spinner model
@@ -122,16 +129,8 @@ public class EditTimerDialog extends JDialog {
 
             // Add the timer to the user data and save it to the database
             try {
-                final var timerData = new TimerData(timerId, name, description, iconPath, workTime, breakTime);
-                userData.addTimer(timerData);
-                if (updateListener != null) {
-                    super.dispose();
-                    if (timerId == -1) {
-                        updateListener.onAddNewTimer(timerData);
-                    } else {
-                        updateListener.onUpdateTimer(timerData);
-                    }
-                }
+                userData.addTimer(new TimerData(timerId, name, description, iconPath, workTime, breakTime));
+                super.dispose();
             } catch (final SQLException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "An error occurred while saving the timer",
@@ -144,9 +143,8 @@ public class EditTimerDialog extends JDialog {
                     "Remove Timer", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 // Remove the timer from the database and close the dialog
                 try {
-                    final var removedTimer = userData.removeTimer(timerId);
+                    userData.removeTimer(timerId);
                     super.dispose();
-                    onRemoveTimer(removedTimer);
                 } catch (final SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "An error occurred while removing the timer",
@@ -169,19 +167,6 @@ public class EditTimerDialog extends JDialog {
                 }
             }
         });
-    }
-
-    private void onRemoveTimer(final TimerData timer) {
-        if (timer != null) {
-            super.dispose();
-            if (updateListener != null) {
-                updateListener.onRemoveTimer(timer);
-            }
-        }
-    }
-
-    public void setUpdateListener(final UpdateListener updateListener) {
-        this.updateListener = updateListener;
     }
 
     private void createUIComponents() {

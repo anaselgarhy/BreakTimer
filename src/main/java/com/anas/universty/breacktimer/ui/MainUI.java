@@ -7,34 +7,39 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 /**
  * @author <a href="https://github.com/anas-elgarhy">Anas Elgarhy</a>
  * @version 1.0
  * @since 22/12/2022
  */
-public class MainUI extends JFrame implements UpdateListener, MouseListener {
+public class MainUI extends JFrame {
 
     private JPanel mainPanel;
     private JLabel addTimerLabel;
     private JPanel timersPanel;
-    private JLabel therNoTimersYetLabel;
+    private JLabel theirNoTimersYetLabel;
+    private JLabel reloadIcon;
     private final UserData userData;
 
     public MainUI(final UserData userData) {
         this.userData = userData;
 
         super.setContentPane(mainPanel);
-        super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.pack();
         super.setLocationRelativeTo(null); // center the form
 
         addTheListeners();
-
-       updateUI(userData);
+        setupUI();
+        updateUI(userData);
 
         super.setVisible(true);
+    }
+
+    private void setupUI() {
+        // Change the cursor to hand cursor when the mouse is over the reload icon
+        reloadIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     private void updateUI(final UserData userData) {
@@ -46,76 +51,41 @@ public class MainUI extends JFrame implements UpdateListener, MouseListener {
             // Add the timers widgets
             for (final TimerData timerData : userData.getTimers().values()) {
                 final var timerWidget = new TimerWidget(timerData);
-                // Add the mouse listener to the timer widget
-                timerWidget.addMouseListener(this);
-                timersPanel.add(new TimerWidget(timerData));
+                timerWidget.addViewButtonListener(e -> {
+                    // Open the timer form
+                    new TimerDialog(this, timerData);
+                    dispose();
+                });
+                timersPanel.add(timerWidget);
             }
         } else {
             // Change the timers panel to be a border layout
             timersPanel.setLayout(new BorderLayout());
             // Add the "There are no timers yet" label
-            timersPanel.add(therNoTimersYetLabel, BorderLayout.CENTER);
+            timersPanel.add(theirNoTimersYetLabel, BorderLayout.CENTER);
         }
+        // Refresh the timers panel
+        timersPanel.revalidate();
     }
 
     private void addTheListeners() {
         addTimerLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                final var addDialog = new EditTimerDialog(null, userData);
-                addDialog.setUpdateListener(MainUI.this);
-                addDialog.setVisible(true);
+                new EditTimerDialog(null, userData);
+            }
+        });
+        // Add the mouse listener to the reload icon
+        reloadIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+                updateUI(userData);
             }
         });
     }
 
-    @Override
-    public void onAddNewTimer(final TimerData timerData) {
-        timersPanel.add(new TimerWidget(timerData));
-    }
-
-    @Override
-    public void onRemoveTimer(final TimerData timerData) {
-        // Update the timers panel
-        updateUI(userData);
-    }
-
-    @Override
-    public void onUpdateTimer(final TimerData timerData) {
-        // Update the timers panel
-        updateUI(userData);
-    }
-
     public UserData getUserData() {
         return userData;
-    }
-
-    @Override
-    public void mouseClicked(final MouseEvent e) {
-        final var timerData = userData.getTimers().get(((TimerWidget) e.getSource()).getId());
-        final var editDialog = new EditTimerDialog(timerData, userData);
-        editDialog.setUpdateListener(this);
-        editDialog.setVisible(true);
-    }
-
-    @Override
-    public void mousePressed(final MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(final MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(final MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(final MouseEvent e) {
-
     }
 
     private void createUIComponents() {

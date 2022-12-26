@@ -175,4 +175,5 @@ class DatabaseHelperTest {
             assertEquals(40, timers.size());
         });
     }
+
 }

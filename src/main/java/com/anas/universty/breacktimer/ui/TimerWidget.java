@@ -3,6 +3,7 @@ package com.anas.universty.breacktimer.ui;
 import com.anas.universty.breacktimer.timer.TimerData;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
 /**
@@ -15,6 +16,7 @@ public class TimerWidget extends JPanel {
     private JLabel timerNameLabel;
     private JLabel workTimeLabel;
     private JLabel breakTimeLabel;
+    private JButton viewButton;
     private final int id;
 
     /**
@@ -25,24 +27,16 @@ public class TimerWidget extends JPanel {
     public TimerWidget(final TimerData timerData) {
         this.id = timerData.getId();
         super.add(panel1);
-        super.setPreferredSize(panel1.getPreferredSize());
-        super.setMaximumSize(panel1.getPreferredSize());
-        super.setMinimumSize(panel1.getPreferredSize());
 
         // Set up the widget data
         timerNameLabel.setText(timerData.getName());
         timerNameLabel.setIcon(new ImageIcon(timerData.getIcon()));
-        workTimeLabel.setText(String.valueOf(timerData.getWorkTime()));
-        breakTimeLabel.setText(String.valueOf(timerData.getBreakTime()));
+        workTimeLabel.setText(timerData.getWorkTime().toString());
+        breakTimeLabel.setText(timerData.getBreakTime().toString());
     }
 
-    @Override
-    public synchronized void addMouseListener(final MouseListener l) {
-        super.addMouseListener(l);
-        panel1.addMouseListener(l);
-        timerNameLabel.addMouseListener(l);
-        workTimeLabel.addMouseListener(l);
-        breakTimeLabel.addMouseListener(l);
+    public void addViewButtonListener(final ActionListener listener) {
+        viewButton.addActionListener(listener);
     }
 
     /**

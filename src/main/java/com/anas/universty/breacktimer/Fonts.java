@@ -12,6 +12,7 @@ public enum Fonts {
     Link_FONT(new Font("Arial", Font.PLAIN, 16)),
     INPUT_FIELD_FONT(new Font("Arial", Font.PLAIN, 16)),
     SP_BUTTON_FONT(new Font("Arial", Font.PLAIN, 16)),
+    TIMER_FONT(new Font("Consolas", Font.PLAIN, 79)),
     ;
 
     private final Font font;

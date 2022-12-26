@@ -10,6 +10,8 @@ import com.anas.universty.breacktimer.validation.validators.PasswordValidator;
 import com.anas.universty.breacktimer.validation.validators.UsernameValidator;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * @author <a href="https://github.com/anas-elgarhy">Anas Elgarhy</a>
@@ -33,6 +35,8 @@ public class RegistrationForm extends JDialog {
     public RegistrationForm() {
         super.setContentPane(mainPnel);
         super.setModal(true);
+        super.setTitle("Registration Form");
+        super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setupUI();
         setupTheListeners();
         super.pack(); // resize the form to fit the components
@@ -68,6 +72,14 @@ public class RegistrationForm extends JDialog {
                 super.dispose();
             } catch (final Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // Add a window listener to open the login form when the registration form is closed
+        super.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(final WindowEvent windowEvent) {
+                new LoginForm();
             }
         });
     }

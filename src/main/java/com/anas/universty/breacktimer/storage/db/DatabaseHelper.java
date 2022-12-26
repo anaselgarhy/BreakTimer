@@ -36,7 +36,7 @@ public enum DatabaseHelper {
     }
 
     /**
-     * Login the user, and return the user data.
+     * Check if user are exits, and return the user data.
      *
      * @param username the username
      * @param password the password
