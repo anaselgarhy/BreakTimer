@@ -155,11 +155,4 @@ public class TimerDialog extends JDialog implements TimerListener {
     private void createUIComponents() {
         mainPanel = new JPanel();
     }
-
-    public static void main(String[] args) {
-        final var timerData = new TimerData(1, "test", "Test timer", "src/main/resources/laptop.png", Clock.fromMinutes(25).toMinutes(), Clock.fromMinutes(5).toMinutes());
-        timerData.setIcon("src/main/resources/timer.png");
-        final var dialog = new TimerDialog(null, timerData);
-        dialog.setVisible(true);
-    }
 }
